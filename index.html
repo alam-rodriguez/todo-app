@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>17-crea un formulario para guardar nombre de personas en el localstorage y muestralos por pantalla en una lista de html</title>
+</head>
+<body>
+	<div class="encabezado">
+		17-crea un formulario para guardar nombre de personas en el localstorage y muestralos por pantalla en una lista de html
+	</div>
+	<form>
+		<input type="text" id="input1" placeholder="nombre">
+		<input type="submit" value="Enviar formulario" id="enviar">
+
+		<div id="resultado"> Resultado... </div>
+	</form>
+
+<!---------------------------ESTILOS--------------------------->
+	<style type="text/css">
+		.encabezado{
+			margin: auto;
+			padding: 20px;
+			width: 80%;
+			background: #aaa;
+			border-radius: 10px;
+			border: black 3px solid ;
+		}
+		body {
+			background: #2C5C0E;
+		}
+		form{
+		  justify-content: center;
+		  align-items: center;
+		}
+		input{
+			margin: 10px;
+			padding: 10px;
+			background: #aaa;
+			border-radius: 7px;
+			border-color: #000;
+		}
+		#resultado {
+			margin: auto;
+			padding: 20px;
+			width: 80%;
+			height: 200px;
+			background: #aaa;
+			border-radius: 10px;
+		}		
+	</style>
+<!---------------------------ESTILOS--------------------------->
+
+<!---------------------------JAVASCRIPT--------------------------->
+
+	<script type="text/javascript">
+		const input1 = document.querySelector('#input1');
+	
+		const resultado = document.querySelector('#resultado');
+		const reset = ()=>{
+			input1.value = '';
+		}
+		const render = ( nombres )=>{
+			const data = JSON.parse(localStorage.getItem('nombre'));
+			resultado.innerHTML = '<ol>';
+			console.log( nombres )
+			for( let i = 0; i < nombres.length ; i++){
+				resultado.innerHTML += '<li id='+ i +'>'+ data[i] +'</li>';
+				resultado.innerHTML += '<button class="eliminar" id='+ i +'>Eliminar</button>';
+			}
+			resultado.innerHTML += '</ol>';
+			borrar( data );
+		}
+
+	
+		enviar.addEventListener('click', (e)=>{
+			e.preventDefault();
+
+			if( localStorage.getItem('nombre') == null){
+				localStorage.setItem('nombre','[]');
+			}
+
+			if( input1.value.length >= 3){
+				let db = JSON.parse( localStorage.getItem('nombre') );
+				db.push(input1.value);
+				localStorage.setItem('nombre',JSON.stringify( db ) );		
+
+				render( db );
+				reset();
+			}
+		});
+
+		window.onload = () =>{
+			const db = JSON.parse( localStorage.getItem('nombre') );
+			render( db );
+		}
+
+
+		// boton para eliminar 
+
+		const borrar = ( data ) => {
+			const eliminar = document.querySelectorAll('button');
+
+			for( let i = 0; i < eliminar.length; i++){
+
+				eliminar[i].addEventListener('click', (e)=>{
+				e.preventDefault();
+
+				console.log(data[i]);
+				data.splice(i, 1);
+
+				localStorage.setItem('nombre',JSON.stringify( data ) );
+
+				console.log(data);
+
+				render( data );
+		});
+			}
+		}
+
+		
+		
+
+
+
+
+		
+	</script>
+<!---------------------------JAVASCRIPT--------------------------->
+
+</body>
+</html>
+
